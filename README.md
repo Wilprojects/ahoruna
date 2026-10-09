@@ -1,17 +1,55 @@
-# ahoruna
+# Ahoruna
 
-Gestor de finanzas personales multiplataforma.
+**Tus finanzas, más simples.**
 
-## Getting Started
+Ahoruna es una aplicación móvil de gestión de finanzas personales
+desarrollada con Flutter para Android y iOS.
 
-This project is a starting point for a Flutter application.
+## Tecnologías
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter
+- Dart
+- Riverpod
+- GoRouter
+- Firebase (próximas fases)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Arquitectura
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+El proyecto utiliza una arquitectura Feature First combinada con una
+Clean Architecture simplificada.
+
+Cada funcionalidad podrá dividirse en:
+
+- Presentation
+- Domain
+- Data
+
+## Ramas
+
+- `main`: versión estable.
+- `develop`: integración y desarrollo activo.
+
+## Requisitos
+
+- Flutter SDK
+- Android Studio
+- Android SDK
+- Git
+
+## Ejecutar el proyecto
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Validaciones
+
+```bash
+flutter analyze
+flutter test
+```
+
+## Estado del proyecto
+Actualmente el proyecto se encuentra en la Fase 1:
+configuración y arquitectura inicial.
