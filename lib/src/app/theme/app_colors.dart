@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Identidad principal.
+  // Identidad principal de Ahoruna.
   static const Color primary = Color(0xFF5B5CF0);
   static const Color primarySecondary = Color(0xFF7B7DF7);
+  static const Color primarySoft = Color(0xFFEDEDFF);
+
+  // Gradiente principal.
+  static const Color gradientMiddle = Color(0xFF7A63F3);
+  static const Color gradientEnd = Color(0xFF9674F6);
+  static const Color buttonGradientEnd = Color(0xFF7B6CF4);
 
   // Estados financieros.
   static const Color income = Color(0xFF14B87A);
