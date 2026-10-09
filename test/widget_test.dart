@@ -1,24 +1,21 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import 'package:ahoruna/src/app/app.dart';
 
 void main() {
-  testWidgets('renders Ahoruna foundation screen', (tester) async {
-    await tester.pumpWidget(
-      //Crea nuestra aplicación dentro del entorno de pruebas
-      const ProviderScope(child: AhorunaApp()),
-    );
+  testWidgets('renders Ahoruna design system screen', (tester) async {
+    await tester.pumpWidget(const ProviderScope(child: AhorunaApp()));
 
-    await tester.pumpAndSettle(); //Espera a que terminen las reconstrucciones/animaciones pendientes
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
 
-    expect(
-      find.text('Ahoruna'),
-      findsOneWidget,
-    ); //Verifica una condición, se comprueba queaparezca 'Ahoruna'
-    expect(
-      find.text('Tus finanzas, más simples'), //Verifica una condición, se comprueba queaparezca 'Tus finanzas, más simples'
-      findsOneWidget,
-    );
+    expect(find.text('Ahoruna'), findsOneWidget);
+
+    expect(find.text('Tus finanzas, más simples'), findsOneWidget);
+
+    expect(find.text('Apariencia'), findsOneWidget);
+
+    expect(find.text('Acción principal'), findsOneWidget);
   });
 }
