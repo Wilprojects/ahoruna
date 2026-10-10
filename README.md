@@ -82,3 +82,27 @@ flutter test
     - EmptyView
     - ErrorView
 - Pantalla temporal de validación del Design System.
+
+### Fase 3 - Completada
+
+- Implementación de Splash Screen.
+- Persistencia local del estado de onboarding.
+- Uso de SharedPreferencesAsync.
+- Arquitectura Data / Domain / Presentation para onboarding.
+- Repository Pattern.
+- Casos de uso:
+  - GetOnboardingStatus.
+  - CompleteOnboarding.
+- Inyección de dependencias mediante Riverpod.
+- Onboarding interactivo de tres páginas.
+- Navegación inicial con GoRouter.
+- Pantallas:
+  - Login.
+  - Registro.
+  - Recuperación de contraseña.
+  - Home provisional.
+- Validaciones reutilizables de formularios.
+- Flujo de autenticación simulado.
+- Pruebas unitarias del dominio.
+- Prueba de widget de Login.
+
