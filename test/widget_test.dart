@@ -1,21 +1,43 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:ahoruna/src/app/app.dart';
+import 'package:ahoruna/src/app/theme/app_theme.dart';
+import 'package:ahoruna/src/features/auth/presentation/screens/login_screen.dart';
 
 void main() {
-  testWidgets('renders Ahoruna design system screen', (tester) async {
-    await tester.pumpWidget(const ProviderScope(child: AhorunaApp()));
+  testWidgets('renders login screen', (tester) async {
+    final router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) {
+            return const LoginScreen();
+          },
+        ),
+      ],
+    );
 
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp.router(
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          routerConfig: router,
+        ),
+      ),
+    );
 
-    expect(find.text('Ahoruna'), findsOneWidget);
+    await tester.pumpAndSettle();
 
-    expect(find.text('Tus finanzas, más simples'), findsOneWidget);
+    expect(find.text('Bienvenido de nuevo'), findsOneWidget);
 
-    expect(find.text('Apariencia'), findsOneWidget);
+    expect(find.text('Correo electrónico'), findsOneWidget);
 
-    expect(find.text('Acción principal'), findsOneWidget);
+    expect(find.text('Contraseña'), findsOneWidget);
+
+    expect(find.text('Iniciar sesión'), findsOneWidget);
   });
 }
