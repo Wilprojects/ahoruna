@@ -55,7 +55,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return;
       }
 
-      context.go(AppRoutes.home);
+      context.go(AppRoutes.splash);
     } on AuthFailure catch (error) {
       if (!mounted) {
         return;
