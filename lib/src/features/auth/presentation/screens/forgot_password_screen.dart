@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:ahoruna/src/app/router/app_router.dart';
+import 'package:ahoruna/src/app/router/app_routes.dart';
+import 'package:ahoruna/src/app/theme/ahoruna_colors.dart';
 import 'package:ahoruna/src/app/theme/app_dimensions.dart';
 import 'package:ahoruna/src/core/extensions/theme_extensions.dart';
 import 'package:ahoruna/src/core/utils/validators.dart';
+import 'package:ahoruna/src/features/auth/domain/failures/auth_failure.dart';
+import 'package:ahoruna/src/features/auth/presentation/providers/auth_providers.dart';
 import 'package:ahoruna/src/shared/widgets/ahoruna_button.dart';
 import 'package:ahoruna/src/shared/widgets/ahoruna_card.dart';
 import 'package:ahoruna/src/shared/widgets/ahoruna_text_field.dart';
-import 'package:ahoruna/src/app/theme/ahoruna_colors.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() {
+  ConsumerState<ForgotPasswordScreen> createState() {
     return _ForgotPasswordScreenState();
   }
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
@@ -31,20 +34,42 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    setState(() {
-      _emailSent = true;
-    });
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .sendPasswordReset(email: _emailController.text);
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _emailSent = true;
+      });
+    } on AuthFailure catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(error.message)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.ahorunaColors;
+
+    final authController = ref.watch(authControllerProvider);
+
+    final isLoading = authController.isLoading;
 
     return Scaffold(
       appBar: AppBar(),
@@ -59,7 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               child: _emailSent
                   ? _buildSuccess(theme, colors)
-                  : _buildForm(theme, colors),
+                  : _buildForm(theme, colors, isLoading),
             ),
           ),
         ),
@@ -67,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 
-  Widget _buildForm(ThemeData theme, AhorunaColors colors) {
+  Widget _buildForm(ThemeData theme, AhorunaColors colors, bool isLoading) {
     return Form(
       key: _formKey,
       child: Column(
@@ -107,7 +132,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           AhorunaButton(
             label: 'Enviar instrucciones',
             icon: Icons.send_rounded,
-            onPressed: _submit,
+            isLoading: isLoading,
+            onPressed: isLoading ? null : _submit,
           ),
         ],
       ),
@@ -129,8 +155,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Text('Revisa tu correo', style: theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               Text(
-                'Enviamos las instrucciones de recuperación '
-                'a ${_emailController.text.trim()}.',
+                'Enviamos las instrucciones de recuperación a ${_emailController.text.trim()}.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colors.textSecondary,

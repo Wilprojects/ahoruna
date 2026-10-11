@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:ahoruna/src/app/router/app_router.dart';
+import 'package:ahoruna/src/app/router/app_routes.dart';
 import 'package:ahoruna/src/app/theme/app_dimensions.dart';
 import 'package:ahoruna/src/core/extensions/theme_extensions.dart';
 import 'package:ahoruna/src/core/utils/validators.dart';
@@ -9,16 +9,21 @@ import 'package:ahoruna/src/shared/widgets/ahoruna_brand_mark.dart';
 import 'package:ahoruna/src/shared/widgets/ahoruna_button.dart';
 import 'package:ahoruna/src/shared/widgets/ahoruna_text_field.dart';
 
-class RegisterScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:ahoruna/src/features/auth/domain/failures/auth_failure.dart';
+import 'package:ahoruna/src/features/auth/presentation/providers/auth_providers.dart';
+
+class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() {
+  ConsumerState<RegisterScreen> createState() {
     return _RegisterScreenState();
   }
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
@@ -52,18 +57,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return null;
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    context.go(AppRoutes.home);
+    try {
+      await ref
+          .read(authControllerProvider.notifier)
+          .register(
+            displayName: _nameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+          );
+
+      if (!mounted) {
+        return;
+      }
+
+      context.go(AppRoutes.home);
+    } on AuthFailure catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(error.message)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = context.ahorunaColors;
+
+    final authController = ref.watch(authControllerProvider);
+
+    final isLoading = authController.isLoading;
 
     return Scaffold(
       appBar: AppBar(),
@@ -167,7 +198,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     AhorunaButton(
                       label: 'Crear cuenta',
                       icon: Icons.person_add_alt_1_rounded,
-                      onPressed: _submit,
+                      isLoading: isLoading,
+                      onPressed: isLoading ? null : _submit,
                     ),
                     const SizedBox(height: 16),
                     Row(
