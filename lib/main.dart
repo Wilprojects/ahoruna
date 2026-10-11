@@ -1,15 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:ahoruna/firebase_options.dart';
 import 'package:ahoruna/src/app/app.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized(); //Garantiza que el motor Flutter y los bindings necesarios están preparados
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(
-    const ProviderScope(
-      //Contenedor raíz de Riverpod
-      child: AhorunaApp(),
-    ),
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  runApp(const ProviderScope(child: AhorunaApp()));
 }

@@ -106,3 +106,37 @@ flutter test
 - Pruebas unitarias del dominio.
 - Prueba de widget de Login.
 
+### Fase 4 - Completada
+
+- Integración de Firebase Core.
+- Configuración mediante FlutterFire CLI.
+- Firebase Authentication con Email/Password.
+- Cloud Firestore.
+- Registro real de usuarios.
+- Inicio de sesión real.
+- Persistencia automática de sesión.
+- Cierre de sesión.
+- Recuperación real de contraseña.
+- Creación de perfil de usuario en Firestore.
+- Protección de rutas con GoRouter.
+- Gestión de autenticación mediante Riverpod.
+- Implementación de Clean Architecture para Authentication:
+  - Data Sources.
+  - Repository.
+  - Use Cases.
+  - Domain Entity.
+  - Controller.
+  - Providers.
+- Traducción de errores Firebase a mensajes de dominio.
+- Reglas iniciales de seguridad de Firestore.
+- Pruebas unitarias de casos de uso.
+
+#### Modelo inicial de Firestore
+
+users/{uid}
+
+- displayName
+- email
+- photoUrl
+- createdAt
+- updatedAt

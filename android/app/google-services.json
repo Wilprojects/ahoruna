@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1000769937219",
+    "project_id": "ahoruna-8e645",
+    "storage_bucket": "ahoruna-8e645.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000769937219:android:91d7fd61d0cf8780d919f6",
+        "android_client_info": {
+          "package_name": "com.ahoruna.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxnL0cLlzVLUHI3WTQUXZG-9WSCAnu7C4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

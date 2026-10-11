@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:ahoruna/src/app/router/app_router.dart';
+import 'package:ahoruna/src/app/router/app_routes.dart';
 import 'package:ahoruna/src/app/theme/app_colors.dart';
 import 'package:ahoruna/src/core/extensions/theme_extensions.dart';
 import 'package:ahoruna/src/features/onboarding/presentation/providers/onboarding_providers.dart';
@@ -74,7 +74,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         return;
       }
 
-      context.go(AppRoutes.login);
+      context.go(AppRoutes.splash);
     } catch (_) {
       if (!mounted) {
         return;

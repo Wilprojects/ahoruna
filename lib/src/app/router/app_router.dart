@@ -1,5 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:ahoruna/src/app/router/app_routes.dart';
+import 'package:ahoruna/src/app/router/auth_router_refresh.dart';
+import 'package:ahoruna/src/features/auth/presentation/providers/auth_dependencies.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/login_screen.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/register_screen.dart';
@@ -7,61 +11,78 @@ import 'package:ahoruna/src/features/home/presentation/screens/home_screen.dart'
 import 'package:ahoruna/src/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:ahoruna/src/features/startup/presentation/screens/splash_screen.dart';
 
-class AppRoutes {
-  AppRoutes._();
+final appRouterProvider = Provider<GoRouter>((ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
 
-  static const String splash = '/splash';
-  static const String onboarding = '/onboarding';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String forgotPassword = '/forgot-password';
-  static const String home = '/home';
-}
+  final refreshNotifier = AuthRouterRefresh(authRepository.userChanges());
 
-final GoRouter appRouter = GoRouter(
-  initialLocation: AppRoutes.splash,
-  routes: [
-    GoRoute(
-      path: AppRoutes.splash,
-      name: 'splash',
-      builder: (context, state) {
-        return const SplashScreen();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.onboarding,
-      name: 'onboarding',
-      builder: (context, state) {
-        return const OnboardingScreen();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.login,
-      name: 'login',
-      builder: (context, state) {
-        return const LoginScreen();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.register,
-      name: 'register',
-      builder: (context, state) {
-        return const RegisterScreen();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.forgotPassword,
-      name: 'forgotPassword',
-      builder: (context, state) {
-        return const ForgotPasswordScreen();
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.home,
-      name: 'home',
-      builder: (context, state) {
-        return const HomeScreen();
-      },
-    ),
-  ],
-);
+  ref.onDispose(refreshNotifier.dispose);
+
+  const publicRoutes = <String>{
+    AppRoutes.splash,
+    AppRoutes.onboarding,
+    AppRoutes.login,
+    AppRoutes.register,
+    AppRoutes.forgotPassword,
+  };
+
+  return GoRouter(
+    initialLocation: AppRoutes.splash,
+    refreshListenable: refreshNotifier,
+    redirect: (context, state) {
+      final isAuthenticated = authRepository.currentUser != null;
+
+      final isPublicRoute = publicRoutes.contains(state.matchedLocation);
+
+      if (!isAuthenticated && !isPublicRoute) {
+        return AppRoutes.login;
+      }
+
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        name: 'splash',
+        builder: (context, state) {
+          return const SplashScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        name: 'onboarding',
+        builder: (context, state) {
+          return const OnboardingScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        name: 'login',
+        builder: (context, state) {
+          return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        name: 'register',
+        builder: (context, state) {
+          return const RegisterScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        name: 'forgotPassword',
+        builder: (context, state) {
+          return const ForgotPasswordScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        name: 'home',
+        builder: (context, state) {
+          return const HomeScreen();
+        },
+      ),
+    ],
+  );
+});
