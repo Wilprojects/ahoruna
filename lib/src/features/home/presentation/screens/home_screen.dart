@@ -39,7 +39,25 @@ class HomeScreen extends ConsumerWidget {
     final isLoading = authController.isLoading;
 
     return Scaffold(
-      appBar: const AhorunaAppBar(title: 'Ahoruna'),
+      appBar: AhorunaAppBar(
+        title: 'Ahoruna',
+        actions: [
+          IconButton(
+            tooltip: 'Perfil',
+            onPressed: () {
+              context.push(AppRoutes.profile);
+            },
+            icon: const Icon(Icons.person_outline_rounded),
+          ),
+          IconButton(
+            tooltip: 'Configuración',
+            onPressed: () {
+              context.push(AppRoutes.settings);
+            },
+            icon: const Icon(Icons.settings_outlined),
+          ),
+        ],
+      ),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(

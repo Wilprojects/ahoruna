@@ -75,7 +75,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return;
       }
 
-      context.go(AppRoutes.home);
+      context.go(AppRoutes.splash);
     } on AuthFailure catch (error) {
       if (!mounted) {
         return;

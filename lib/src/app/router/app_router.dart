@@ -10,6 +10,10 @@ import 'package:ahoruna/src/features/auth/presentation/screens/register_screen.d
 import 'package:ahoruna/src/features/home/presentation/screens/home_screen.dart';
 import 'package:ahoruna/src/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:ahoruna/src/features/startup/presentation/screens/splash_screen.dart';
+import 'package:ahoruna/src/features/profile/presentation/screens/profile_screen.dart';
+import 'package:ahoruna/src/features/settings/presentation/screens/appearance_screen.dart';
+import 'package:ahoruna/src/features/settings/presentation/screens/security_screen.dart';
+import 'package:ahoruna/src/features/settings/presentation/screens/settings_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -81,6 +85,34 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'home',
         builder: (context, state) {
           return const HomeScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        name: 'profile',
+        builder: (context, state) {
+          return const ProfileScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        builder: (context, state) {
+          return const SettingsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.appearance,
+        name: 'appearance',
+        builder: (context, state) {
+          return const AppearanceScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.security,
+        name: 'security',
+        builder: (context, state) {
+          return const SecurityScreen();
         },
       ),
     ],

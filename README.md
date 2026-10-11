@@ -140,3 +140,33 @@ users/{uid}
 - photoUrl
 - createdAt
 - updatedAt
+
+### Fase 5 - Completada
+
+- Gestión de perfil de usuario.
+- Edición de nombre.
+- Sincronización de displayName entre Firebase Auth y Firestore.
+- Pantalla de configuración.
+- Preferencia de moneda.
+- Preferencia de idioma.
+- Preferencia de notificaciones.
+- Configuración del porcentaje de alerta de presupuesto.
+- Tema Sistema, Claro y Oscuro.
+- Persistencia local del tema.
+- Sincronización de preferencias mediante Firestore.
+- Pantalla de seguridad.
+- Recuperación/cambio de contraseña mediante Firebase.
+- Cierre de sesión.
+- Rutas privadas para perfil y configuración.
+
+#### Modelo de preferencias
+
+users/{uid}/settings/preferences
+
+- currency
+- language
+- theme
+- notificationsEnabled
+- budgetAlertPercent
+- createdAt
+- updatedAt
