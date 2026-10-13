@@ -16,4 +16,14 @@ class AppRoutes {
   static const String appearance = '/settings/appearance';
 
   static const String security = '/settings/security';
+
+  static const String categories = '/categories';
+
+  static const String categoryCreate = '/categories/new';
+
+  static const String categoryEdit = '/categories/:categoryId/edit';
+
+  static String categoryEditPath(String categoryId) {
+    return '/categories/$categoryId/edit';
+  }
 }

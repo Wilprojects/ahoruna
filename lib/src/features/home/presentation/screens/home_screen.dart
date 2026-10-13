@@ -119,26 +119,46 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: AppDimensions.spaceXl),
                   AhorunaCard(
                     showShadow: false,
-                    child: Column(
+                    onTap: () {
+                      context.push(AppRoutes.categories);
+                    },
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.route_rounded,
-                          size: 36,
-                          color: theme.colorScheme.primary,
-                        ),
-                        const SizedBox(height: AppDimensions.spaceMd),
-                        Text(
-                          'Navegación inicial lista',
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Splash, onboarding y acceso '
-                          'inicial ya se encuentran conectados.',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colors.textSecondary,
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: colors.primarySoft,
+                            borderRadius: BorderRadius.circular(15),
                           ),
+                          child: Icon(
+                            Icons.category_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Categorías',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Organiza tus ingresos y gastos '
+                                'con categorías personalizadas.',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: colors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: colors.textSecondary,
                         ),
                       ],
                     ),
