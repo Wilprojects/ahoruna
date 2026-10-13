@@ -15,6 +15,9 @@ import 'package:ahoruna/src/features/settings/presentation/screens/appearance_sc
 import 'package:ahoruna/src/features/settings/presentation/screens/security_screen.dart';
 import 'package:ahoruna/src/features/settings/presentation/screens/settings_screen.dart';
 
+import 'package:ahoruna/src/features/categories/presentation/screens/categories_screen.dart';
+import 'package:ahoruna/src/features/categories/presentation/screens/category_form_screen.dart';
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
 
@@ -113,6 +116,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'security',
         builder: (context, state) {
           return const SecurityScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.categories,
+        name: 'categories',
+        builder: (context, state) {
+          return const CategoriesScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.categoryCreate,
+        name: 'categoryCreate',
+        builder: (context, state) {
+          return const CategoryFormScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.categoryEdit,
+        name: 'categoryEdit',
+        builder: (context, state) {
+          final categoryId = state.pathParameters['categoryId']!;
+
+          return CategoryFormScreen(categoryId: categoryId);
         },
       ),
     ],

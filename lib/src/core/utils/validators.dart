@@ -55,4 +55,22 @@ class Validators {
 
     return null;
   }
+
+  static String? categoryName(String? value) {
+    final text = value?.trim() ?? '';
+
+    if (text.isEmpty) {
+      return 'Ingresa un nombre para la categoría.';
+    }
+
+    if (text.length < 2) {
+      return 'El nombre debe tener al menos 2 caracteres.';
+    }
+
+    if (text.length > 30) {
+      return 'El nombre no puede superar los 30 caracteres.';
+    }
+
+    return null;
+  }
 }

@@ -170,3 +170,77 @@ users/{uid}/settings/preferences
 - budgetAlertPercent
 - createdAt
 - updatedAt
+
+### Fase 6 - Completada
+
+Se implementó la gestión completa de categorías
+financieras.
+
+#### Funcionalidades
+
+- Categorías de gastos.
+- Categorías de ingresos.
+- Categorías compatibles con ambos tipos.
+- Categorías predeterminadas por usuario.
+- Creación automática de categorías iniciales.
+- Creación de categorías personalizadas.
+- Edición de categorías.
+- Eliminación de categorías personalizadas.
+- Protección de categorías predeterminadas.
+- Selector de iconos.
+- Selector de colores.
+- Vista previa de categoría.
+- Prevención de nombres duplicados.
+- Filtros por tipo.
+- Sincronización en tiempo real con Firestore.
+
+#### Firestore
+
+Las categorías se almacenan en:
+
+users/{uid}/categories/{categoryId}
+
+Campos:
+
+- name
+- nameNormalized
+- iconKey
+- colorHex
+- type
+- isDefault
+- isActive
+- createdAt
+- updatedAt
+
+#### Arquitectura
+
+La feature Categories utiliza:
+
+- Data Sources.
+- Repository Pattern.
+- Domain Entities.
+- Use Cases.
+- Riverpod.
+- AsyncNotifier.
+- StreamProvider.
+- Cloud Firestore en tiempo real.
+
+#### Categorías predeterminadas
+
+- Alimentación.
+- Transporte.
+- Hogar.
+- Salud.
+- Entretenimiento.
+- Servicios.
+- Sueldo.
+- Freelance.
+- Inversiones.
+- Otros.
+
+#### Validaciones
+
+- No se permiten nombres vacíos.
+- No se permiten nombres duplicados.
+- Las categorías predeterminadas no pueden eliminarse.
+- Las categorías pertenecen únicamente al usuario autenticado.
