@@ -36,6 +36,8 @@ abstract interface class CategoriesRemoteDataSource {
   });
 
   Future<void> deleteCategory(String categoryId);
+
+  Future<bool> categoryHasTransactions(String categoryId);
 }
 
 class FirestoreCategoriesRemoteDataSource
@@ -203,5 +205,20 @@ class FirestoreCategoriesRemoteDataSource
 
   String _normalizeName(String value) {
     return value.trim().toLowerCase();
+  }
+
+  @override
+  Future<bool> categoryHasTransactions(String categoryId) async {
+    final user = _requireUser();
+
+    final snapshot = await _firestore
+        .collection(FirestoreCollections.users)
+        .doc(user.uid)
+        .collection(FirestoreCollections.transactions)
+        .where('categoryId', isEqualTo: categoryId)
+        .limit(1)
+        .get();
+
+    return snapshot.docs.isNotEmpty;
   }
 }

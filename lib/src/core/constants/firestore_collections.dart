@@ -7,4 +7,5 @@ class FirestoreCollections {
   static const String preferencesDocument = 'preferences';
 
   static const String categories = 'categories';
+  static const String transactions = 'transactions';
 }

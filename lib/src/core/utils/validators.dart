@@ -73,4 +73,54 @@ class Validators {
 
     return null;
   }
+
+  static String? transactionAmount(String? value) {
+    final text = value?.trim() ?? '';
+
+    if (text.isEmpty) {
+      return 'Ingresa un monto.';
+    }
+
+    final validFormat = RegExp(r'^\d+([.,]\d{1,2})?$').hasMatch(text);
+
+    if (!validFormat) {
+      return 'Ingresa un monto válido con máximo 2 decimales.';
+    }
+
+    final amount = double.tryParse(text.replaceAll(',', '.'));
+
+    if (amount == null || amount <= 0) {
+      return 'El monto debe ser mayor a 0.';
+    }
+
+    return null;
+  }
+
+  static String? transactionDescription(String? value) {
+    final text = value?.trim() ?? '';
+
+    if (text.isEmpty) {
+      return 'Ingresa una descripción.';
+    }
+
+    if (text.length < 2) {
+      return 'La descripción debe tener al menos 2 caracteres.';
+    }
+
+    if (text.length > 60) {
+      return 'La descripción no puede superar los 60 caracteres.';
+    }
+
+    return null;
+  }
+
+  static String? transactionNote(String? value) {
+    final text = value?.trim() ?? '';
+
+    if (text.length > 200) {
+      return 'La nota no puede superar los 200 caracteres.';
+    }
+
+    return null;
+  }
 }
