@@ -26,4 +26,14 @@ class AppRoutes {
   static String categoryEditPath(String categoryId) {
     return '/categories/$categoryId/edit';
   }
+
+  static const String transactions = '/transactions';
+
+  static const String transactionCreate = '/transactions/new';
+
+  static const String transactionEdit = '/transactions/:transactionId/edit';
+
+  static String transactionEditPath(String transactionId) {
+    return '/transactions/$transactionId/edit';
+  }
 }

@@ -163,6 +163,53 @@ class HomeScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  AhorunaCard(
+                    showShadow: false,
+                    onTap: () {
+                      context.push(AppRoutes.transactions);
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: colors.primarySoft,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Icon(
+                            Icons.receipt_long_outlined,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Movimientos',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Registra y administra tus '
+                                'ingresos y gastos.',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: colors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: colors.textSecondary,
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: AppDimensions.space2Xl),
                   AhorunaButton(
                     label: 'Cerrar sesión',

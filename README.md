@@ -244,3 +244,62 @@ La feature Categories utiliza:
 - No se permiten nombres duplicados.
 - Las categorías predeterminadas no pueden eliminarse.
 - Las categorías pertenecen únicamente al usuario autenticado.
+
+### Fase 7 - Completada
+
+Se implementó el CRUD completo de movimientos
+financieros.
+
+#### Funcionalidades
+
+- Registro de gastos.
+- Registro de ingresos.
+- Edición de movimientos.
+- Eliminación de movimientos.
+- Listado en tiempo real.
+- Asociación con categorías.
+- Filtrado automático de categorías según tipo.
+- Selección de fecha.
+- Notas opcionales.
+- Validación de montos.
+- Persistencia de moneda.
+- Protección de categorías utilizadas.
+
+#### Modelo Firestore
+
+users/{uid}/transactions/{transactionId}
+
+Campos:
+
+- type
+- amount
+- currency
+- description
+- categoryId
+- date
+- note
+- createdAt
+- updatedAt
+
+#### Reglas del modelo
+
+- amount siempre se almacena positivo.
+- type determina si es ingreso o gasto.
+- Los gastos se representan visualmente con signo negativo.
+- Los ingresos se representan visualmente con signo positivo.
+- Cada movimiento pertenece exclusivamente al usuario autenticado.
+- Cada movimiento referencia una categoría mediante categoryId.
+- No se puede eliminar una categoría que tenga movimientos asociados.
+
+#### Arquitectura
+
+La feature Transactions utiliza:
+
+- Data Sources.
+- Repository Pattern.
+- Domain Entities.
+- Use Cases.
+- Riverpod.
+- AsyncNotifier.
+- StreamProvider.
+- Cloud Firestore en tiempo real.

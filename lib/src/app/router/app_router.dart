@@ -18,6 +18,9 @@ import 'package:ahoruna/src/features/settings/presentation/screens/settings_scre
 import 'package:ahoruna/src/features/categories/presentation/screens/categories_screen.dart';
 import 'package:ahoruna/src/features/categories/presentation/screens/category_form_screen.dart';
 
+import 'package:ahoruna/src/features/transactions/presentation/screens/transaction_form_screen.dart';
+import 'package:ahoruna/src/features/transactions/presentation/screens/transactions_screen.dart';
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
 
@@ -139,6 +142,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final categoryId = state.pathParameters['categoryId']!;
 
           return CategoryFormScreen(categoryId: categoryId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.transactions,
+        name: 'transactions',
+        builder: (context, state) {
+          return const TransactionsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.transactionCreate,
+        name: 'transactionCreate',
+        builder: (context, state) {
+          return const TransactionFormScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.transactionEdit,
+        name: 'transactionEdit',
+        builder: (context, state) {
+          final transactionId = state.pathParameters['transactionId']!;
+
+          return TransactionFormScreen(transactionId: transactionId);
         },
       ),
     ],
