@@ -50,4 +50,14 @@ class TransactionVisuals {
         return 'Ingreso';
     }
   }
+
+  static String formatCurrencyValue(double value, String currency) {
+    final formatter = NumberFormat('#,##0.00');
+
+    final symbol = currencySymbol(currency);
+
+    final sign = value < 0 ? '-' : '';
+
+    return '$sign$symbol ${formatter.format(value.abs())}';
+  }
 }

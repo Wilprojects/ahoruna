@@ -303,3 +303,69 @@ La feature Transactions utiliza:
 - AsyncNotifier.
 - StreamProvider.
 - Cloud Firestore en tiempo real.
+
+### Fase 8 - Completada
+
+Se implementó el Dashboard financiero en tiempo real
+de Ahoruna utilizando los movimientos almacenados en
+Cloud Firestore.
+
+#### Funcionalidades
+
+- Balance financiero real.
+- Balance histórico.
+- Ingresos del mes actual.
+- Gastos del mes actual.
+- Movimientos recientes.
+- Máximo de cinco movimientos recientes.
+- Acceso rápido para registrar movimientos.
+- Acceso rápido al historial.
+- Acceso rápido a categorías.
+- Actualización automática mediante Riverpod y Firestore.
+- Soporte de múltiples monedas sin mezclar importes.
+
+#### Cálculos
+
+Balance:
+
+total ingresos - total gastos
+
+El balance utiliza todo el historial de movimientos
+de la moneda seleccionada.
+
+Ingresos y gastos mensuales utilizan únicamente los
+movimientos correspondientes al mes actual.
+
+#### Monedas
+
+Los totales del Dashboard solamente consideran los
+movimientos cuya moneda coincide con la moneda
+configurada actualmente.
+
+Los movimientos de otras monedas conservan su valor
+original y pueden aparecer en el historial reciente,
+pero no se mezclan en los totales.
+
+#### Arquitectura
+
+El Dashboard no tiene colección propia en Firestore.
+
+Se deriva de:
+
+- transactionsProvider.
+- userPreferencesProvider.
+- CalculateDashboardSummary.
+- dashboardSummaryProvider.
+
+Esto mantiene transactions como fuente de verdad.
+
+#### Tiempo real
+
+Los cambios en movimientos provocan automáticamente
+el recálculo del Dashboard:
+
+- Crear movimiento.
+- Editar movimiento.
+- Eliminar movimiento.
+
+También se recalcula al cambiar la moneda configurada.
