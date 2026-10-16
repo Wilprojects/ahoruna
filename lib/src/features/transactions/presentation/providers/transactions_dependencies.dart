@@ -11,19 +11,14 @@ import 'package:ahoruna/src/features/transactions/domain/usecases/get_transactio
 import 'package:ahoruna/src/features/transactions/domain/usecases/update_transaction.dart';
 import 'package:ahoruna/src/features/transactions/domain/usecases/watch_transactions.dart';
 
-final transactionsRemoteDataSourceProvider =
-    Provider<TransactionsRemoteDataSource>((ref) {
-      return FirestoreTransactionsRemoteDataSource(
-        ref.watch(firebaseAuthProvider),
-        ref.watch(firebaseFirestoreProvider),
-      );
-    });
+import 'package:ahoruna/src/features/transactions/domain/usecases/filter_transactions.dart';
+
+final transactionsRemoteDataSourceProvider = Provider<TransactionsRemoteDataSource>((ref) {
+  return FirestoreTransactionsRemoteDataSource(ref.watch(firebaseAuthProvider), ref.watch(firebaseFirestoreProvider),);
+});
 
 final transactionRepositoryProvider = Provider<TransactionRepository>((ref) {
-  return TransactionRepositoryImpl(
-    ref.watch(transactionsRemoteDataSourceProvider),
-    ref.watch(categoryRepositoryProvider),
-  );
+  return TransactionRepositoryImpl(ref.watch(transactionsRemoteDataSourceProvider), ref.watch(categoryRepositoryProvider),);
 });
 
 final watchTransactionsUseCaseProvider = Provider<WatchTransactions>((ref) {
@@ -45,3 +40,8 @@ final updateTransactionUseCaseProvider = Provider<UpdateTransaction>((ref) {
 final deleteTransactionUseCaseProvider = Provider<DeleteTransaction>((ref) {
   return DeleteTransaction(ref.watch(transactionRepositoryProvider));
 });
+
+final filterTransactionsUseCaseProvider = Provider<FilterTransactions>((ref) {
+    return const FilterTransactions();
+  },
+);

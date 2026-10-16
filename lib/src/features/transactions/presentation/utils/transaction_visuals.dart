@@ -60,4 +60,37 @@ class TransactionVisuals {
 
     return '$sign$symbol ${formatter.format(value.abs())}';
   }
+
+  static String historyDateLabel(
+      DateTime date, {
+        DateTime? now,
+      }) {
+    final reference = now ?? DateTime.now();
+
+    final today = DateTime(
+      reference.year,
+      reference.month,
+      reference.day,
+    );
+
+    final transactionDay = DateTime(
+      date.year,
+      date.month,
+      date.day,
+    );
+
+    if (transactionDay == today) {
+      return 'Hoy';
+    }
+
+    final yesterday = today.subtract(
+      const Duration(days: 1),
+    );
+
+    if (transactionDay == yesterday) {
+      return 'Ayer';
+    }
+
+    return formatDate(date);
+  }
 }
