@@ -6,246 +6,140 @@ import 'package:ahoruna/src/features/transactions/domain/usecases/filter_transac
 
 void main() {
   group('FilterTransactions', () {
-    const useCase =
-    FilterTransactions();
+    const useCase = FilterTransactions();
 
-    final transactions =
-    <FinanceTransaction>[
+    final transactions = <FinanceTransaction>[
       FinanceTransaction(
         id: '1',
-        type:
-        TransactionType.expense,
+        type: TransactionType.expense,
         amount: 50,
         currency: 'PEN',
-        description:
-        'Cena familiar',
+        description: 'Cena familiar',
         categoryId: 'food',
-        date:
-        DateTime(2026, 10, 15),
-        note:
-        'Restaurante favorito',
+        date: DateTime(2026, 10, 15),
+        note: 'Restaurante favorito',
       ),
       FinanceTransaction(
         id: '2',
-        type:
-        TransactionType.income,
+        type: TransactionType.income,
         amount: 3500,
         currency: 'PEN',
-        description:
-        'Sueldo octubre',
+        description: 'Sueldo octubre',
         categoryId: 'salary',
-        date:
-        DateTime(2026, 10, 14),
+        date: DateTime(2026, 10, 14),
       ),
       FinanceTransaction(
         id: '3',
-        type:
-        TransactionType.expense,
+        type: TransactionType.expense,
         amount: 100,
         currency: 'PEN',
-        description:
-        'Supermercado',
+        description: 'Supermercado',
         categoryId: 'food',
-        date:
-        DateTime(2026, 9, 20),
+        date: DateTime(2026, 9, 20),
       ),
       FinanceTransaction(
         id: '4',
-        type:
-        TransactionType.expense,
+        type: TransactionType.expense,
         amount: 80,
         currency: 'PEN',
-        description:
-        'Veterinario',
+        description: 'Veterinario',
         categoryId: 'pets',
-        date:
-        DateTime(2026, 10, 10),
+        date: DateTime(2026, 10, 10),
       ),
     ];
 
-    const categoryNames =
-    <String, String>{
+    const categoryNames = <String, String>{
       'food': 'Alimentación',
       'salary': 'Sueldo',
       'pets': 'Mascotas',
     };
 
-    test(
-      'filters by transaction type',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter:
-          const TransactionFilter(
-            type:
-            TransactionTypeFilter
-                .income,
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('filters by transaction type', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: const TransactionFilter(type: TransactionTypeFilter.income),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          1,
-        );
+      expect(result.length, 1);
 
-        expect(
-          result.first.id,
-          '2',
-        );
-      },
-    );
+      expect(result.first.id, '2');
+    });
 
-    test(
-      'filters by category',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter:
-          const TransactionFilter(
-            categoryId: 'food',
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('filters by category', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: const TransactionFilter(categoryId: 'food'),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          2,
-        );
-      },
-    );
+      expect(result.length, 2);
+    });
 
-    test(
-      'filters by inclusive date range',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter: TransactionFilter(
-            dateFrom:
-            DateTime(2026, 10, 10),
-            dateTo:
-            DateTime(2026, 10, 14),
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('filters by inclusive date range', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: TransactionFilter(
+          dateFrom: DateTime(2026, 10, 10),
+          dateTo: DateTime(2026, 10, 14),
+        ),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          2,
-        );
+      expect(result.length, 2);
 
-        expect(
-          result.map((value) => value.id),
-          containsAll([
-            '2',
-            '4',
-          ]),
-        );
-      },
-    );
+      expect(result.map((value) => value.id), containsAll(['2', '4']));
+    });
 
-    test(
-      'searches description',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter:
-          const TransactionFilter(
-            query: 'super',
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('searches description', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: const TransactionFilter(query: 'super'),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          1,
-        );
+      expect(result.length, 1);
 
-        expect(
-          result.first.id,
-          '3',
-        );
-      },
-    );
+      expect(result.first.id, '3');
+    });
 
-    test(
-      'searches notes',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter:
-          const TransactionFilter(
-            query: 'restaurante',
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('searches notes', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: const TransactionFilter(query: 'restaurante'),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          1,
-        );
+      expect(result.length, 1);
 
-        expect(
-          result.first.id,
-          '1',
-        );
-      },
-    );
+      expect(result.first.id, '1');
+    });
 
-    test(
-      'search ignores accents and case',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter:
-          const TransactionFilter(
-            query: 'ALIMENTACION',
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('search ignores accents and case', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: const TransactionFilter(query: 'ALIMENTACION'),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          2,
-        );
-      },
-    );
+      expect(result.length, 2);
+    });
 
-    test(
-      'combines multiple filters',
-          () {
-        final result = useCase(
-          transactions: transactions,
-          filter: TransactionFilter(
-            query: 'mascotas',
-            type:
-            TransactionTypeFilter
-                .expense,
-            dateFrom:
-            DateTime(2026, 10, 1),
-            dateTo:
-            DateTime(2026, 10, 31),
-          ),
-          categoryNamesById:
-          categoryNames,
-        );
+    test('combines multiple filters', () {
+      final result = useCase(
+        transactions: transactions,
+        filter: TransactionFilter(
+          query: 'mascotas',
+          type: TransactionTypeFilter.expense,
+          dateFrom: DateTime(2026, 10, 1),
+          dateTo: DateTime(2026, 10, 31),
+        ),
+        categoryNamesById: categoryNames,
+      );
 
-        expect(
-          result.length,
-          1,
-        );
+      expect(result.length, 1);
 
-        expect(
-          result.first.id,
-          '4',
-        );
-      },
-    );
+      expect(result.first.id, '4');
+    });
   });
 }

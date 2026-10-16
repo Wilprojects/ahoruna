@@ -1,9 +1,4 @@
-
-enum TransactionTypeFilter {
-  all,
-  expense,
-  income,
-}
+enum TransactionTypeFilter { all, expense, income }
 
 class TransactionFilter {
   const TransactionFilter({

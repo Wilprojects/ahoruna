@@ -17,34 +17,25 @@ import 'package:ahoruna/src/shared/widgets/ahoruna_app_bar.dart';
 import 'package:ahoruna/src/shared/widgets/error_view.dart';
 import 'package:ahoruna/src/shared/widgets/loading_view.dart';
 
-class TransactionsScreen
-    extends ConsumerStatefulWidget {
+class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 
   @override
-  ConsumerState<TransactionsScreen>
-  createState() {
+  ConsumerState<TransactionsScreen> createState() {
     return _TransactionsScreenState();
   }
 }
 
-class _TransactionsScreenState
-    extends ConsumerState<TransactionsScreen> {
-  late final TextEditingController
-  _searchController;
+class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
+  late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
 
-    final filter = ref.read(
-      transactionFilterProvider,
-    );
+    final filter = ref.read(transactionFilterProvider);
 
-    _searchController =
-        TextEditingController(
-          text: filter.query,
-        );
+    _searchController = TextEditingController(text: filter.query);
   }
 
   @override
@@ -53,211 +44,127 @@ class _TransactionsScreenState
     super.dispose();
   }
 
-  Future<void> _openFilters(
-      List<FinanceCategory> categories,
-      ) async {
-    final currentFilter = ref.read(
-      transactionFilterProvider,
-    );
+  Future<void> _openFilters(List<FinanceCategory> categories) async {
+    final currentFilter = ref.read(transactionFilterProvider);
 
-    final result =
-    await showModalBottomSheet<
-        TransactionFilter>(
+    final result = await showModalBottomSheet<TransactionFilter>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) {
         return TransactionFiltersSheet(
-          currentFilter:
-          currentFilter,
-          categories:
-          categories,
+          currentFilter: currentFilter,
+          categories: categories,
         );
       },
     );
 
-    if (result == null ||
-        !mounted) {
+    if (result == null || !mounted) {
       return;
     }
 
-    ref
-        .read(
-      transactionFilterProvider
-          .notifier,
-    )
-        .applyAdvancedFilters(
-      result,
-    );
+    ref.read(transactionFilterProvider.notifier).applyAdvancedFilters(result);
   }
 
   void _clearAllFilters() {
     _searchController.clear();
 
-    ref
-        .read(
-      transactionFilterProvider
-          .notifier,
-    )
-        .clearAll();
+    ref.read(transactionFilterProvider.notifier).clearAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredTransactions =
-    ref.watch(
-      filteredTransactionsProvider,
-    );
+    final filteredTransactions = ref.watch(filteredTransactionsProvider);
 
-    final categories = ref.watch(
-      categoriesProvider,
-    );
+    final categories = ref.watch(categoriesProvider);
 
-    final filter = ref.watch(
-      transactionFilterProvider,
-    );
+    final filter = ref.watch(transactionFilterProvider);
 
-    final categoryValues =
-    categories.when(
+    final categoryValues = categories.when(
       data: (values) => values,
-      loading: () =>
-      const <FinanceCategory>[],
-      error: (error, stackTrace) =>
-      const <FinanceCategory>[],
+      loading: () => const <FinanceCategory>[],
+      error: (error, stackTrace) => const <FinanceCategory>[],
     );
 
-    final categoriesById =
-    <String, FinanceCategory>{
-      for (final category
-      in categoryValues)
-        category.id: category,
+    final categoriesById = <String, FinanceCategory>{
+      for (final category in categoryValues) category.id: category,
     };
 
     return Scaffold(
-      appBar: const AhorunaAppBar(
-        title: 'Movimientos',
-        showBackButton: true,
-      ),
-      floatingActionButton:
-      FloatingActionButton.extended(
+      appBar: const AhorunaAppBar(title: 'Movimientos', showBackButton: true),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          context.push(
-            AppRoutes.transactionCreate,
-          );
+          context.push(AppRoutes.transactionCreate);
         },
-        icon: const Icon(
-          Icons.add_rounded,
-        ),
-        label: const Text(
-          'Nuevo movimiento',
-        ),
+        icon: const Icon(Icons.add_rounded),
+        label: const Text('Nuevo movimiento'),
       ),
       body: SafeArea(
         top: false,
         child: Column(
           children: [
             Padding(
-              padding:
-              const EdgeInsets.fromLTRB(
-                AppDimensions
-                    .pageHorizontalPadding,
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.pageHorizontalPadding,
                 AppDimensions.spaceMd,
-                AppDimensions
-                    .pageHorizontalPadding,
+                AppDimensions.pageHorizontalPadding,
                 AppDimensions.spaceSm,
               ),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller:
-                      _searchController,
-                      textInputAction:
-                      TextInputAction.search,
-                      decoration:
-                      InputDecoration(
-                        hintText:
-                        'Buscar movimientos...',
-                        prefixIcon:
-                        const Icon(
-                          Icons.search_rounded,
-                        ),
-                        suffixIcon:
-                        filter.query.isEmpty
+                      controller: _searchController,
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration(
+                        hintText: 'Buscar movimientos...',
+                        prefixIcon: const Icon(Icons.search_rounded),
+                        suffixIcon: filter.query.isEmpty
                             ? null
                             : IconButton(
-                          tooltip:
-                          'Limpiar búsqueda',
-                          onPressed:
-                              () {
-                            _searchController
-                                .clear();
+                                tooltip: 'Limpiar búsqueda',
+                                onPressed: () {
+                                  _searchController.clear();
 
-                            ref
-                                .read(
-                              transactionFilterProvider.notifier,
-                            )
-                                .setQuery(
-                              '',
-                            );
-                          },
-                          icon:
-                          const Icon(
-                            Icons
-                                .close_rounded,
-                          ),
-                        ),
+                                  ref
+                                      .read(transactionFilterProvider.notifier)
+                                      .setQuery('');
+                                },
+                                icon: const Icon(Icons.close_rounded),
+                              ),
                       ),
                       onChanged: (value) {
                         ref
-                            .read(
-                          transactionFilterProvider
-                              .notifier,
-                        )
-                            .setQuery(
-                          value,
-                        );
+                            .read(transactionFilterProvider.notifier)
+                            .setQuery(value);
                       },
                     ),
                   ),
-                  const SizedBox(
-                    width:
-                    AppDimensions.spaceSm,
-                  ),
+                  const SizedBox(width: AppDimensions.spaceSm),
                   _FilterButton(
-                    activeCount: filter
-                        .activeAdvancedFilterCount,
+                    activeCount: filter.activeAdvancedFilterCount,
                     onPressed: () {
-                      _openFilters(
-                        categoryValues,
-                      );
+                      _openFilters(categoryValues);
                     },
                   ),
                 ],
               ),
             ),
             Padding(
-              padding:
-              const EdgeInsets.fromLTRB(
-                AppDimensions
-                    .pageHorizontalPadding,
+              padding: const EdgeInsets.fromLTRB(
+                AppDimensions.pageHorizontalPadding,
                 4,
-                AppDimensions
-                    .pageHorizontalPadding,
+                AppDimensions.pageHorizontalPadding,
                 AppDimensions.spaceSm,
               ),
               child: Row(
                 children: [
                   Expanded(
-                    child: filteredTransactions
-                        .when(
+                    child: filteredTransactions.when(
                       loading: () {
-                        return const Text(
-                          'Buscando...',
-                        );
+                        return const Text('Buscando...');
                       },
-                      error:
-                          (error, stackTrace) {
+                      error: (error, stackTrace) {
                         return const Text(
                           'No se pudieron obtener los resultados.',
                         );
@@ -265,61 +172,44 @@ class _TransactionsScreenState
                       data: (values) {
                         return Text(
                           '${values.length} '
-                              '${values.length == 1 ? 'resultado' : 'resultados'}',
+                          '${values.length == 1 ? 'resultado' : 'resultados'}',
                         );
                       },
                     ),
                   ),
                   if (filter.hasAnyFilters)
                     TextButton(
-                      onPressed:
-                      _clearAllFilters,
-                      child: const Text(
-                        'Limpiar',
-                      ),
+                      onPressed: _clearAllFilters,
+                      child: const Text('Limpiar'),
                     ),
                 ],
               ),
             ),
             Expanded(
-              child: filteredTransactions
-                  .when(
+              child: filteredTransactions.when(
                 loading: () {
-                  return const LoadingView(
-                    message:
-                    'Cargando movimientos...',
-                  );
+                  return const LoadingView(message: 'Cargando movimientos...');
                 },
-                error:
-                    (error, stackTrace) {
+                error: (error, stackTrace) {
                   return Center(
                     child: ErrorView(
-                      message:
-                      'No pudimos cargar tus movimientos.',
+                      message: 'No pudimos cargar tus movimientos.',
                       onRetry: () {
-                        ref.invalidate(
-                          transactionsProvider,
-                        );
+                        ref.invalidate(transactionsProvider);
 
-                        ref.invalidate(
-                          categoriesProvider,
-                        );
+                        ref.invalidate(categoriesProvider);
                       },
                     ),
                   );
                 },
                 data: (values) {
                   if (values.isEmpty) {
-                    return _EmptyHistory(
-                      hasFilters:
-                      filter.hasAnyFilters,
-                    );
+                    return _EmptyHistory(hasFilters: filter.hasAnyFilters);
                   }
 
                   return _TransactionsHistory(
                     transactions: values,
-                    categoriesById:
-                    categoriesById,
+                    categoriesById: categoriesById,
                   );
                 },
               ),
@@ -331,12 +221,8 @@ class _TransactionsScreenState
   }
 }
 
-class _FilterButton
-    extends StatelessWidget {
-  const _FilterButton({
-    required this.activeCount,
-    required this.onPressed,
-  });
+class _FilterButton extends StatelessWidget {
+  const _FilterButton({required this.activeCount, required this.onPressed});
 
   final int activeCount;
   final VoidCallback onPressed;
@@ -348,51 +234,28 @@ class _FilterButton
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
-        minimumSize:
-        const Size(54, 54),
-        padding:
-        const EdgeInsets.symmetric(
-          horizontal: 14,
-        ),
+        minimumSize: const Size(54, 54),
+        padding: const EdgeInsets.symmetric(horizontal: 14),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
-            Icons.filter_alt_outlined,
-          ),
+          const Icon(Icons.filter_alt_outlined),
           if (activeCount > 0) ...[
             const SizedBox(width: 6),
             Container(
-              constraints:
-              const BoxConstraints(
-                minWidth: 22,
-                minHeight: 22,
-              ),
-              padding:
-              const EdgeInsets.symmetric(
-                horizontal: 6,
-              ),
+              constraints: const BoxConstraints(minWidth: 22, minHeight: 22),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color:
-                theme.colorScheme.primary,
-                borderRadius:
-                BorderRadius.circular(
-                  20,
-                ),
+                color: theme.colorScheme.primary,
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 '$activeCount',
-                style: theme
-                    .textTheme
-                    .labelSmall
-                    ?.copyWith(
-                  color: theme
-                      .colorScheme
-                      .onPrimary,
-                  fontWeight:
-                  FontWeight.w700,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -403,18 +266,15 @@ class _FilterButton
   }
 }
 
-class _TransactionsHistory
-    extends StatelessWidget {
+class _TransactionsHistory extends StatelessWidget {
   const _TransactionsHistory({
     required this.transactions,
     required this.categoriesById,
   });
 
-  final List<FinanceTransaction>
-  transactions;
+  final List<FinanceTransaction> transactions;
 
-  final Map<String, FinanceCategory>
-  categoriesById;
+  final Map<String, FinanceCategory> categoriesById;
 
   @override
   Widget build(BuildContext context) {
@@ -425,80 +285,49 @@ class _TransactionsHistory
 
     DateTime? currentGroupDate;
 
-    for (final transaction
-    in transactions) {
-      final transactionDay =
-      DateTime(
+    for (final transaction in transactions) {
+      final transactionDay = DateTime(
         transaction.date.year,
         transaction.date.month,
         transaction.date.day,
       );
 
       final isNewGroup =
-          currentGroupDate == null ||
-              transactionDay !=
-                  currentGroupDate;
+          currentGroupDate == null || transactionDay != currentGroupDate;
 
       if (isNewGroup) {
         if (widgets.isNotEmpty) {
-          widgets.add(
-            const SizedBox(
-              height:
-              AppDimensions.spaceMd,
-            ),
-          );
+          widgets.add(const SizedBox(height: AppDimensions.spaceMd));
         }
 
         widgets.add(
           Padding(
-            padding:
-            const EdgeInsets.only(
-              top: 4,
-              bottom: 8,
-            ),
+            padding: const EdgeInsets.only(top: 4, bottom: 8),
             child: Text(
-              TransactionVisuals
-                  .historyDateLabel(
-                transaction.date,
-              )
+              TransactionVisuals.historyDateLabel(transaction.date)
                   .toUpperCase(),
-              style: theme
-                  .textTheme
-                  .labelMedium
-                  ?.copyWith(
-                color:
-                colors.textSecondary,
-                fontWeight:
-                FontWeight.w700,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: colors.textSecondary,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
         );
 
-        currentGroupDate =
-            transactionDay;
+        currentGroupDate = transactionDay;
       }
 
       widgets.add(
         TransactionTile(
           transaction: transaction,
-          category:
-          categoriesById[
-          transaction.categoryId
-          ],
+          category: categoriesById[transaction.categoryId],
           onTap: () {
-            context.push(
-              AppRoutes.transactionEditPath(
-                transaction.id,
-              ),
-            );
+            context.push(AppRoutes.transactionEditPath(transaction.id));
           },
         ),
       );
 
-      widgets.add(
-        const SizedBox(height: 10),
-      );
+      widgets.add(const SizedBox(height: 10));
     }
 
     return ListView(
@@ -513,11 +342,8 @@ class _TransactionsHistory
   }
 }
 
-class _EmptyHistory
-    extends StatelessWidget {
-  const _EmptyHistory({
-    required this.hasFilters,
-  });
+class _EmptyHistory extends StatelessWidget {
+  const _EmptyHistory({required this.hasFilters});
 
   final bool hasFilters;
 
@@ -528,44 +354,33 @@ class _EmptyHistory
 
     return Center(
       child: SingleChildScrollView(
-        padding:
-        const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         child: Column(
-          mainAxisSize:
-          MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               hasFilters
                   ? Icons.search_off_rounded
-                  : Icons
-                  .receipt_long_outlined,
+                  : Icons.receipt_long_outlined,
               size: 58,
-              color:
-              colors.textSecondary,
+              color: colors.textSecondary,
             ),
             const SizedBox(height: 16),
             Text(
               hasFilters
                   ? 'No encontramos movimientos'
                   : 'Aún no tienes movimientos',
-              textAlign:
-              TextAlign.center,
-              style:
-              theme.textTheme.titleMedium,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 7),
             Text(
               hasFilters
                   ? 'Prueba con otra búsqueda o modifica los filtros aplicados.'
                   : 'Registra tu primer ingreso o gasto para comenzar a organizar tus finanzas.',
-              textAlign:
-              TextAlign.center,
-              style: theme
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(
-                color:
-                colors.textSecondary,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colors.textSecondary,
               ),
             ),
           ],

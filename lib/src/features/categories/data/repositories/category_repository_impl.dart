@@ -135,15 +135,25 @@ class CategoryRepositoryImpl implements CategoryRepository {
         );
       }
 
-      final isInUse = await _remoteDataSource.categoryHasTransactions(
+      final hasTransactions = await _remoteDataSource.categoryHasTransactions(
         categoryId,
       );
 
-      if (isInUse) {
+      if (hasTransactions) {
         throw const CategoryFailure(
           'No puedes eliminar esta categoría '
           'porque tiene movimientos asociados.',
           code: 'category-in-use',
+        );
+      }
+
+      final hasBudgets = await _remoteDataSource.categoryHasBudgets(categoryId);
+
+      if (hasBudgets) {
+        throw const CategoryFailure(
+          'No puedes eliminar esta categoría '
+          'porque tiene presupuestos asociados.',
+          code: 'category-has-budgets',
         );
       }
 
