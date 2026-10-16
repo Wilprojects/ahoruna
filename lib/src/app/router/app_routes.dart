@@ -36,4 +36,18 @@ class AppRoutes {
   static String transactionEditPath(String transactionId) {
     return '/transactions/$transactionId/edit';
   }
+
+  static const String budgets = '/budgets';
+
+  static const String budgetCreate = '/budgets/new';
+
+  static const String budgetEdit = '/budgets/:budgetId/edit';
+
+  static String budgetCreatePath(String period) {
+    return '/budgets/new?period=$period';
+  }
+
+  static String budgetEditPath(String budgetId) {
+    return '/budgets/$budgetId/edit';
+  }
 }

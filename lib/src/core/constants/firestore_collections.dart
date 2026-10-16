@@ -8,4 +8,5 @@ class FirestoreCollections {
 
   static const String categories = 'categories';
   static const String transactions = 'transactions';
+  static const String budgets = 'budgets';
 }

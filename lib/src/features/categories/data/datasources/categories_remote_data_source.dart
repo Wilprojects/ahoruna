@@ -38,6 +38,8 @@ abstract interface class CategoriesRemoteDataSource {
   Future<void> deleteCategory(String categoryId);
 
   Future<bool> categoryHasTransactions(String categoryId);
+
+  Future<bool> categoryHasBudgets(String categoryId);
 }
 
 class FirestoreCategoriesRemoteDataSource
@@ -215,6 +217,21 @@ class FirestoreCategoriesRemoteDataSource
         .collection(FirestoreCollections.users)
         .doc(user.uid)
         .collection(FirestoreCollections.transactions)
+        .where('categoryId', isEqualTo: categoryId)
+        .limit(1)
+        .get();
+
+    return snapshot.docs.isNotEmpty;
+  }
+
+  @override
+  Future<bool> categoryHasBudgets(String categoryId) async {
+    final user = _requireUser();
+
+    final snapshot = await _firestore
+        .collection(FirestoreCollections.users)
+        .doc(user.uid)
+        .collection(FirestoreCollections.budgets)
         .where('categoryId', isEqualTo: categoryId)
         .limit(1)
         .get();

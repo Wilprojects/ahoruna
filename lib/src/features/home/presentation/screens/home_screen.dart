@@ -116,7 +116,6 @@ class _DashboardContent extends StatelessWidget {
 
   final DashboardSummary summary;
   final String? firstName;
-
   final Map<String, FinanceCategory> categoriesById;
 
   @override
@@ -172,8 +171,7 @@ class _DashboardContent extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Balance histórico en '
-                  '${summary.currency}',
+                  'Balance histórico en ${summary.currency}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: Colors.white70,
                   ),
@@ -184,6 +182,7 @@ class _DashboardContent extends StatelessWidget {
 
           const SizedBox(height: AppDimensions.space2Xl),
 
+          // Resumen mensual.
           Row(
             children: [
               Text('Resumen del mes', style: theme.textTheme.titleMedium),
@@ -229,6 +228,8 @@ class _DashboardContent extends StatelessWidget {
             ],
           ),
 
+          // Aviso cuando existen movimientos
+          // en una moneda diferente.
           if (summary.otherCurrencyTransactionCount > 0) ...[
             const SizedBox(height: AppDimensions.spaceMd),
             AhorunaCard(
@@ -262,6 +263,7 @@ class _DashboardContent extends StatelessWidget {
 
           const SizedBox(height: AppDimensions.space2Xl),
 
+          // Acciones rápidas.
           Text('Acciones rápidas', style: theme.textTheme.titleMedium),
 
           const SizedBox(height: AppDimensions.spaceMd),
@@ -276,6 +278,7 @@ class _DashboardContent extends StatelessWidget {
 
           const SizedBox(height: AppDimensions.spaceMd),
 
+          // Movimientos y Categorías.
           Row(
             children: [
               Expanded(
@@ -300,8 +303,58 @@ class _DashboardContent extends StatelessWidget {
             ],
           ),
 
+          // ==================================================
+          // NUEVO EN FASE 10: ACCESO A PRESUPUESTOS
+          // ==================================================
+          const SizedBox(height: AppDimensions.spaceMd),
+
+          AhorunaCard(
+            showShadow: false,
+            onTap: () {
+              context.push(AppRoutes.budgets);
+            },
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: colors.primarySoft,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    Icons.account_balance_wallet_outlined,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Presupuestos', style: theme.textTheme.labelLarge),
+                      const SizedBox(height: 3),
+                      Text(
+                        'Define límites mensuales y '
+                        'controla tus gastos.',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded, color: colors.textSecondary),
+              ],
+            ),
+          ),
+
+          // ==================================================
+          // FIN DEL CAMBIO DE FASE 10
+          // ==================================================
           const SizedBox(height: AppDimensions.space2Xl),
 
+          // Movimientos recientes.
           Row(
             children: [
               Expanded(

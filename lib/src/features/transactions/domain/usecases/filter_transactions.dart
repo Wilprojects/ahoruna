@@ -9,99 +9,69 @@ class FilterTransactions {
     required TransactionFilter filter,
     required Map<String, String> categoryNamesById,
   }) {
-    final normalizedQuery = _normalize(
-      filter.query,
-    );
+    final normalizedQuery = _normalize(filter.query);
 
     final queryTerms = normalizedQuery
         .split(' ')
-        .where(
-          (term) => term.isNotEmpty,
-    )
+        .where((term) => term.isNotEmpty)
         .toList();
 
-    final filtered = transactions.where(
-          (transaction) {
-        if (!_matchesType(
-          transaction,
-          filter.type,
-        )) {
-          return false;
-        }
+    final filtered = transactions.where((transaction) {
+      if (!_matchesType(transaction, filter.type)) {
+        return false;
+      }
 
-        if (!_matchesCategory(
-          transaction,
-          filter.categoryId,
-        )) {
-          return false;
-        }
+      if (!_matchesCategory(transaction, filter.categoryId)) {
+        return false;
+      }
 
-        if (!_matchesDateRange(
-          transaction,
-          filter.dateFrom,
-          filter.dateTo,
-        )) {
-          return false;
-        }
+      if (!_matchesDateRange(transaction, filter.dateFrom, filter.dateTo)) {
+        return false;
+      }
 
-        if (!_matchesSearch(
-          transaction,
-          queryTerms,
-          categoryNamesById,
-        )) {
-          return false;
-        }
+      if (!_matchesSearch(transaction, queryTerms, categoryNamesById)) {
+        return false;
+      }
 
-        return true;
-      },
-    ).toList();
+      return true;
+    }).toList();
 
-    filtered.sort(
-          (first, second) {
-        return second.date.compareTo(
-          first.date,
-        );
-      },
-    );
+    filtered.sort((first, second) {
+      return second.date.compareTo(first.date);
+    });
 
     return filtered;
   }
 
   bool _matchesType(
-      FinanceTransaction transaction,
-      TransactionTypeFilter filter,
-      ) {
+    FinanceTransaction transaction,
+    TransactionTypeFilter filter,
+  ) {
     switch (filter) {
       case TransactionTypeFilter.all:
         return true;
 
       case TransactionTypeFilter.expense:
-        return transaction.type ==
-            TransactionType.expense;
+        return transaction.type == TransactionType.expense;
 
       case TransactionTypeFilter.income:
-        return transaction.type ==
-            TransactionType.income;
+        return transaction.type == TransactionType.income;
     }
   }
 
-  bool _matchesCategory(
-      FinanceTransaction transaction,
-      String? categoryId,
-      ) {
+  bool _matchesCategory(FinanceTransaction transaction, String? categoryId) {
     if (categoryId == null) {
       return true;
     }
 
-    return transaction.categoryId ==
-        categoryId;
+    return transaction.categoryId == categoryId;
   }
 
   bool _matchesDateRange(
-      FinanceTransaction transaction,
-      DateTime? from,
-      DateTime? to,
-      ) {
+    FinanceTransaction transaction,
+    DateTime? from,
+    DateTime? to,
+  ) {
     final transactionDate = DateTime(
       transaction.date.year,
       transaction.date.month,
@@ -109,11 +79,7 @@ class FilterTransactions {
     );
 
     if (from != null) {
-      final fromDate = DateTime(
-        from.year,
-        from.month,
-        from.day,
-      );
+      final fromDate = DateTime(from.year, from.month, from.day);
 
       if (transactionDate.isBefore(fromDate)) {
         return false;
@@ -121,11 +87,7 @@ class FilterTransactions {
     }
 
     if (to != null) {
-      final toDate = DateTime(
-        to.year,
-        to.month,
-        to.day,
-      );
+      final toDate = DateTime(to.year, to.month, to.day);
 
       if (transactionDate.isAfter(toDate)) {
         return false;
@@ -136,35 +98,27 @@ class FilterTransactions {
   }
 
   bool _matchesSearch(
-      FinanceTransaction transaction,
-      List<String> queryTerms,
-      Map<String, String> categoryNamesById,
-      ) {
+    FinanceTransaction transaction,
+    List<String> queryTerms,
+    Map<String, String> categoryNamesById,
+  ) {
     if (queryTerms.isEmpty) {
       return true;
     }
 
-    final categoryName =
-        categoryNamesById[
-        transaction.categoryId
-        ] ??
-            '';
+    final categoryName = categoryNamesById[transaction.categoryId] ?? '';
 
     final searchableText = _normalize(
       '${transaction.description} '
-          '${transaction.note ?? ''} '
-          '$categoryName',
+      '${transaction.note ?? ''} '
+      '$categoryName',
     );
 
-    return queryTerms.every(
-      searchableText.contains,
-    );
+    return queryTerms.every(searchableText.contains);
   }
 
   String _normalize(String value) {
-    var result = value
-        .trim()
-        .toLowerCase();
+    var result = value.trim().toLowerCase();
 
     const replacements = {
       'á': 'a',
@@ -176,18 +130,10 @@ class FilterTransactions {
       'ñ': 'n',
     };
 
-    replacements.forEach(
-          (source, target) {
-        result = result.replaceAll(
-          source,
-          target,
-        );
-      },
-    );
+    replacements.forEach((source, target) {
+      result = result.replaceAll(source, target);
+    });
 
-    return result.replaceAll(
-      RegExp(r'\s+'),
-      ' ',
-    );
+    return result.replaceAll(RegExp(r'\s+'), ' ');
   }
 }

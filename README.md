@@ -433,3 +433,96 @@ No se agregaron nuevas colecciones ni índices.
 
 Los filtros se aplican localmente sobre el stream
 de movimientos del usuario.
+
+### Fase 10 - Completada
+
+Se implementó la gestión de presupuestos mensuales
+por categoría.
+
+#### Funcionalidades
+
+- Creación de presupuestos.
+- Edición de presupuestos.
+- Eliminación de presupuestos.
+- Presupuestos mensuales.
+- Navegación entre períodos.
+- Planificación de meses futuros.
+- Presupuestos por categoría.
+- Compatibilidad con múltiples monedas.
+- Límite mensual.
+- Porcentaje configurable de alerta.
+- Estado En orden.
+- Estado Alerta.
+- Estado Excedido.
+- Resumen total de presupuestos.
+- Total gastado.
+- Saldo disponible.
+- Protección de categorías utilizadas.
+
+#### Modelo Firestore
+
+users/{uid}/budgets/{budgetId}
+
+Campos:
+
+- categoryId
+- limitAmount
+- currency
+- period
+- alertPercent
+- isActive
+- createdAt
+- updatedAt
+
+No se almacena spentAmount.
+
+#### Cálculo
+
+El monto gastado se deriva de los movimientos:
+
+- type = expense
+- categoryId = categoría del presupuesto
+- currency = moneda del presupuesto
+- date = período del presupuesto
+
+Esto mantiene Transactions como fuente de verdad.
+
+#### Alertas
+
+Cada presupuesto contiene alertPercent.
+
+Mientras:
+
+spent / limit < alertPercent
+
+el presupuesto permanece En orden.
+
+Cuando:
+
+spent / limit >= alertPercent
+
+se muestra Alerta.
+
+Cuando:
+
+spent / limit >= 100%
+
+se muestra Excedido.
+
+Las notificaciones push reales se implementarán en
+la Fase 13.
+
+#### Arquitectura
+
+Se incorporaron:
+
+- Budget.
+- BudgetOverview.
+- BudgetProgress.
+- BudgetRepository.
+- BudgetsRemoteDataSource.
+- CalculateBudgetOverview.
+- BudgetPeriodController.
+- BudgetsController.
+- budgetsForPeriodProvider.
+- selectedBudgetOverviewProvider.

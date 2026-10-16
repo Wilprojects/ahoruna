@@ -2,8 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ahoruna/src/features/transactions/domain/entities/transaction_filter.dart';
 
-class TransactionFilterController
-    extends Notifier<TransactionFilter> {
+class TransactionFilterController extends Notifier<TransactionFilter> {
   @override
   TransactionFilter build() {
     return const TransactionFilter();
@@ -19,9 +18,7 @@ class TransactionFilterController
     );
   }
 
-  void applyAdvancedFilters(
-      TransactionFilter filter,
-      ) {
+  void applyAdvancedFilters(TransactionFilter filter) {
     state = TransactionFilter(
       query: state.query,
       type: filter.type,
@@ -32,9 +29,7 @@ class TransactionFilterController
   }
 
   void clearAdvancedFilters() {
-    state = TransactionFilter(
-      query: state.query,
-    );
+    state = TransactionFilter(query: state.query);
   }
 
   void clearAll() {

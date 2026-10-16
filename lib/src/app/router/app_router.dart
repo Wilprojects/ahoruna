@@ -21,6 +21,9 @@ import 'package:ahoruna/src/features/categories/presentation/screens/category_fo
 import 'package:ahoruna/src/features/transactions/presentation/screens/transaction_form_screen.dart';
 import 'package:ahoruna/src/features/transactions/presentation/screens/transactions_screen.dart';
 
+import 'package:ahoruna/src/features/budgets/presentation/screens/budget_form_screen.dart';
+import 'package:ahoruna/src/features/budgets/presentation/screens/budgets_screen.dart';
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
 
@@ -165,6 +168,29 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final transactionId = state.pathParameters['transactionId']!;
 
           return TransactionFormScreen(transactionId: transactionId);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.budgets,
+        name: 'budgets',
+        builder: (context, state) {
+          return const BudgetsScreen();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.budgetCreate,
+        name: 'budgetCreate',
+        builder: (context, state) {
+          return BudgetFormScreen(period: state.uri.queryParameters['period']);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.budgetEdit,
+        name: 'budgetEdit',
+        builder: (context, state) {
+          final budgetId = state.pathParameters['budgetId']!;
+
+          return BudgetFormScreen(budgetId: budgetId);
         },
       ),
     ],
