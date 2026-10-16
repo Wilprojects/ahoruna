@@ -369,3 +369,67 @@ el recálculo del Dashboard:
 - Eliminar movimiento.
 
 También se recalcula al cambiar la moneda configurada.
+
+### Fase 9 - Completada
+
+Se mejoró el historial de movimientos con búsqueda
+y filtros avanzados.
+
+#### Búsqueda
+
+La búsqueda permite encontrar movimientos por:
+
+- Descripción.
+- Nota.
+- Nombre de categoría.
+
+La búsqueda:
+
+- No distingue mayúsculas/minúsculas.
+- Tolera acentos comunes.
+- Admite coincidencias parciales.
+- Permite múltiples términos.
+
+#### Filtros
+
+Se incorporaron filtros por:
+
+- Todos los movimientos.
+- Gastos.
+- Ingresos.
+- Categoría.
+- Mes actual.
+- Últimos 30 días.
+- Rango personalizado de fechas.
+
+Los filtros pueden combinarse.
+
+#### Historial
+
+- Resultados ordenados por fecha descendente.
+- Agrupación por día.
+- Encabezados Hoy y Ayer.
+- Contador de resultados.
+- Estado vacío.
+- Estado sin coincidencias.
+- Persistencia temporal de filtros durante navegación.
+
+#### Arquitectura
+
+Se incorporaron:
+
+- TransactionFilter.
+- TransactionFilterController.
+- FilterTransactions.
+- filteredTransactionsProvider.
+- TransactionFiltersSheet.
+
+El Dashboard continúa utilizando transactionsProvider
+sin verse afectado por los filtros del historial.
+
+#### Firestore
+
+No se agregaron nuevas colecciones ni índices.
+
+Los filtros se aplican localmente sobre el stream
+de movimientos del usuario.
