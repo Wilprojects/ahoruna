@@ -91,7 +91,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     };
 
     return Scaffold(
-      appBar: const AhorunaAppBar(title: 'Movimientos', showBackButton: true),
+      appBar: const AhorunaAppBar(title: 'Movimientos', showBackButton: false),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           context.push(AppRoutes.transactionCreate);

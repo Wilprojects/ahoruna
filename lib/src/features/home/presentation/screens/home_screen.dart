@@ -62,17 +62,24 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AhorunaAppBar(
         title: 'Ahoruna',
+
+        // Home es una pantalla principal del Shell.
+        // Nunca debe mostrar flecha de regreso.
+        showBackButton: false,
+
         actions: [
           IconButton(
             tooltip: 'Perfil',
             onPressed: () {
-              context.push(AppRoutes.profile);
+              // Perfil es un TAB principal.
+              context.go(AppRoutes.profile);
             },
             icon: const Icon(Icons.person_outline_rounded),
           ),
           IconButton(
             tooltip: 'Configuración',
             onPressed: () {
+              // Configuración es una pantalla secundaria.
               context.push(AppRoutes.settings);
             },
             icon: const Icon(Icons.settings_outlined),
@@ -146,7 +153,9 @@ class _DashboardContent extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space2Xl),
 
-          // Balance principal.
+          // ==================================================
+          // BALANCE PRINCIPAL
+          // ==================================================
           AhorunaCard(
             gradient: AppGradients.balance,
             child: Column(
@@ -182,7 +191,9 @@ class _DashboardContent extends StatelessWidget {
 
           const SizedBox(height: AppDimensions.space2Xl),
 
-          // Resumen mensual.
+          // ==================================================
+          // RESUMEN DEL MES
+          // ==================================================
           Row(
             children: [
               Text('Resumen del mes', style: theme.textTheme.titleMedium),
@@ -228,8 +239,9 @@ class _DashboardContent extends StatelessWidget {
             ],
           ),
 
-          // Aviso cuando existen movimientos
-          // en una moneda diferente.
+          // ==================================================
+          // AVISO DE OTRAS MONEDAS
+          // ==================================================
           if (summary.otherCurrencyTransactionCount > 0) ...[
             const SizedBox(height: AppDimensions.spaceMd),
             AhorunaCard(
@@ -263,7 +275,9 @@ class _DashboardContent extends StatelessWidget {
 
           const SizedBox(height: AppDimensions.space2Xl),
 
-          // Acciones rápidas.
+          // ==================================================
+          // ACCIONES RÁPIDAS
+          // ==================================================
           Text('Acciones rápidas', style: theme.textTheme.titleMedium),
 
           const SizedBox(height: AppDimensions.spaceMd),
@@ -272,25 +286,41 @@ class _DashboardContent extends StatelessWidget {
             label: 'Nuevo movimiento',
             icon: Icons.add_rounded,
             onPressed: () {
+              // Pantalla secundaria.
               context.push(AppRoutes.transactionCreate);
             },
           ),
 
           const SizedBox(height: AppDimensions.spaceMd),
 
-          // Movimientos y Categorías.
           Row(
             children: [
+              // ----------------------------------------------
+              // MOVIMIENTOS
+              //
+              // Es un TAB principal.
+              // ----------------------------------------------
+
               Expanded(
                 child: _QuickActionCard(
                   icon: Icons.receipt_long_outlined,
                   label: 'Movimientos',
                   onTap: () {
-                    context.push(AppRoutes.transactions);
+                    context.go(AppRoutes.transactions);
                   },
                 ),
               ),
+
               const SizedBox(width: AppDimensions.spaceMd),
+
+              // ----------------------------------------------
+              // CATEGORÍAS
+              //
+              // Es una pantalla secundaria.
+              // IMPORTANTE: debe usar PUSH y NO GO.
+              // De esta forma queda Home en el stack y
+              // Categorías puede volver atrás.
+              // ----------------------------------------------
               Expanded(
                 child: _QuickActionCard(
                   icon: Icons.category_outlined,
@@ -303,15 +333,17 @@ class _DashboardContent extends StatelessWidget {
             ],
           ),
 
-          // ==================================================
-          // NUEVO EN FASE 10: ACCESO A PRESUPUESTOS
-          // ==================================================
           const SizedBox(height: AppDimensions.spaceMd),
 
+          // ----------------------------------------------
+          // PRESUPUESTOS
+          //
+          // Es un TAB principal.
+          // ----------------------------------------------
           AhorunaCard(
             showShadow: false,
             onTap: () {
-              context.push(AppRoutes.budgets);
+              context.go(AppRoutes.budgets);
             },
             child: Row(
               children: [
@@ -349,12 +381,11 @@ class _DashboardContent extends StatelessWidget {
             ),
           ),
 
-          // ==================================================
-          // FIN DEL CAMBIO DE FASE 10
-          // ==================================================
           const SizedBox(height: AppDimensions.space2Xl),
 
-          // Movimientos recientes.
+          // ==================================================
+          // MOVIMIENTOS RECIENTES
+          // ==================================================
           Row(
             children: [
               Expanded(
@@ -365,7 +396,8 @@ class _DashboardContent extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  context.push(AppRoutes.transactions);
+                  // Movimientos es un TAB principal.
+                  context.go(AppRoutes.transactions);
                 },
                 child: const Text('Ver todos'),
               ),
@@ -409,6 +441,8 @@ class _DashboardContent extends StatelessWidget {
                   transaction: transaction,
                   category: categoriesById[transaction.categoryId],
                   onTap: () {
+                    // Editar movimiento es una
+                    // pantalla secundaria.
                     context.push(AppRoutes.transactionEditPath(transaction.id));
                   },
                 ),

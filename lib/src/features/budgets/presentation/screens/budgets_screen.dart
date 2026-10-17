@@ -46,7 +46,7 @@ class BudgetsScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: const AhorunaAppBar(title: 'Presupuestos', showBackButton: true),
+      appBar: const AhorunaAppBar(title: 'Presupuestos', showBackButton: false),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           context.push(AppRoutes.budgetCreatePath(period));
