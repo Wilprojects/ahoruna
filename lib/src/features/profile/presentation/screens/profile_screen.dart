@@ -28,7 +28,7 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AhorunaAppBar(
         title: 'Perfil',
-        showBackButton: true,
+        showBackButton: false,
         actions: [
           IconButton(
             tooltip: 'Configuración',

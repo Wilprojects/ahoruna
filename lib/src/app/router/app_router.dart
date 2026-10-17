@@ -3,26 +3,33 @@ import 'package:go_router/go_router.dart';
 
 import 'package:ahoruna/src/app/router/app_routes.dart';
 import 'package:ahoruna/src/app/router/auth_router_refresh.dart';
+import 'package:ahoruna/src/app/router/main_navigation_shell.dart';
+
 import 'package:ahoruna/src/features/auth/presentation/providers/auth_dependencies.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/login_screen.dart';
 import 'package:ahoruna/src/features/auth/presentation/screens/register_screen.dart';
-import 'package:ahoruna/src/features/home/presentation/screens/home_screen.dart';
-import 'package:ahoruna/src/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:ahoruna/src/features/startup/presentation/screens/splash_screen.dart';
-import 'package:ahoruna/src/features/profile/presentation/screens/profile_screen.dart';
-import 'package:ahoruna/src/features/settings/presentation/screens/appearance_screen.dart';
-import 'package:ahoruna/src/features/settings/presentation/screens/security_screen.dart';
-import 'package:ahoruna/src/features/settings/presentation/screens/settings_screen.dart';
+
+import 'package:ahoruna/src/features/budgets/presentation/screens/budget_form_screen.dart';
+import 'package:ahoruna/src/features/budgets/presentation/screens/budgets_screen.dart';
 
 import 'package:ahoruna/src/features/categories/presentation/screens/categories_screen.dart';
 import 'package:ahoruna/src/features/categories/presentation/screens/category_form_screen.dart';
 
+import 'package:ahoruna/src/features/home/presentation/screens/home_screen.dart';
+
+import 'package:ahoruna/src/features/onboarding/presentation/screens/onboarding_screen.dart';
+
+import 'package:ahoruna/src/features/profile/presentation/screens/profile_screen.dart';
+
+import 'package:ahoruna/src/features/settings/presentation/screens/appearance_screen.dart';
+import 'package:ahoruna/src/features/settings/presentation/screens/security_screen.dart';
+import 'package:ahoruna/src/features/settings/presentation/screens/settings_screen.dart';
+
+import 'package:ahoruna/src/features/startup/presentation/screens/splash_screen.dart';
+
 import 'package:ahoruna/src/features/transactions/presentation/screens/transaction_form_screen.dart';
 import 'package:ahoruna/src/features/transactions/presentation/screens/transactions_screen.dart';
-
-import 'package:ahoruna/src/features/budgets/presentation/screens/budget_form_screen.dart';
-import 'package:ahoruna/src/features/budgets/presentation/screens/budgets_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -54,6 +61,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      // =====================================================
+      // RUTAS PÚBLICAS
+      // =====================================================
+
       GoRoute(
         path: AppRoutes.splash,
         name: 'splash',
@@ -61,6 +72,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const SplashScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.onboarding,
         name: 'onboarding',
@@ -68,6 +80,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const OnboardingScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.login,
         name: 'login',
@@ -75,6 +88,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const LoginScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.register,
         name: 'register',
@@ -82,6 +96,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const RegisterScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.forgotPassword,
         name: 'forgotPassword',
@@ -89,41 +104,87 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const ForgotPasswordScreen();
         },
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        name: 'home',
-        builder: (context, state) {
-          return const HomeScreen();
+
+      // =====================================================
+      // NAVEGACIÓN PRINCIPAL
+      //
+      // Estas son las cuatro pantallas que mantienen
+      // visible la barra de navegación inferior.
+      // =====================================================
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return MainNavigationShell(navigationShell: navigationShell);
         },
+        branches: [
+          // -----------------------------------------------
+          // TAB 1 - INICIO
+          // -----------------------------------------------
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                name: 'home',
+                builder: (context, state) {
+                  return const HomeScreen();
+                },
+              ),
+            ],
+          ),
+
+          // -----------------------------------------------
+          // TAB 2 - MOVIMIENTOS
+          // -----------------------------------------------
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.transactions,
+                name: 'transactions',
+                builder: (context, state) {
+                  return const TransactionsScreen();
+                },
+              ),
+            ],
+          ),
+
+          // -----------------------------------------------
+          // TAB 3 - PRESUPUESTOS
+          // -----------------------------------------------
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.budgets,
+                name: 'budgets',
+                builder: (context, state) {
+                  return const BudgetsScreen();
+                },
+              ),
+            ],
+          ),
+
+          // -----------------------------------------------
+          // TAB 4 - PERFIL
+          // -----------------------------------------------
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                name: 'profile',
+                builder: (context, state) {
+                  return const ProfileScreen();
+                },
+              ),
+            ],
+          ),
+        ],
       ),
-      GoRoute(
-        path: AppRoutes.profile,
-        name: 'profile',
-        builder: (context, state) {
-          return const ProfileScreen();
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.settings,
-        name: 'settings',
-        builder: (context, state) {
-          return const SettingsScreen();
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.appearance,
-        name: 'appearance',
-        builder: (context, state) {
-          return const AppearanceScreen();
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.security,
-        name: 'security',
-        builder: (context, state) {
-          return const SecurityScreen();
-        },
-      ),
+
+      // =====================================================
+      // CATEGORÍAS
+      //
+      // Son pantallas secundarias, por lo que no muestran
+      // la navegación inferior.
+      // =====================================================
       GoRoute(
         path: AppRoutes.categories,
         name: 'categories',
@@ -131,6 +192,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const CategoriesScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.categoryCreate,
         name: 'categoryCreate',
@@ -138,6 +200,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const CategoryFormScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.categoryEdit,
         name: 'categoryEdit',
@@ -147,13 +210,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return CategoryFormScreen(categoryId: categoryId);
         },
       ),
-      GoRoute(
-        path: AppRoutes.transactions,
-        name: 'transactions',
-        builder: (context, state) {
-          return const TransactionsScreen();
-        },
-      ),
+
+      // =====================================================
+      // FORMULARIOS DE MOVIMIENTOS
+      // =====================================================
       GoRoute(
         path: AppRoutes.transactionCreate,
         name: 'transactionCreate',
@@ -161,6 +221,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const TransactionFormScreen();
         },
       ),
+
       GoRoute(
         path: AppRoutes.transactionEdit,
         name: 'transactionEdit',
@@ -170,13 +231,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return TransactionFormScreen(transactionId: transactionId);
         },
       ),
-      GoRoute(
-        path: AppRoutes.budgets,
-        name: 'budgets',
-        builder: (context, state) {
-          return const BudgetsScreen();
-        },
-      ),
+
+      // =====================================================
+      // FORMULARIOS DE PRESUPUESTOS
+      // =====================================================
       GoRoute(
         path: AppRoutes.budgetCreate,
         name: 'budgetCreate',
@@ -184,6 +242,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return BudgetFormScreen(period: state.uri.queryParameters['period']);
         },
       ),
+
       GoRoute(
         path: AppRoutes.budgetEdit,
         name: 'budgetEdit',
@@ -191,6 +250,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final budgetId = state.pathParameters['budgetId']!;
 
           return BudgetFormScreen(budgetId: budgetId);
+        },
+      ),
+
+      // =====================================================
+      // CONFIGURACIÓN
+      // =====================================================
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        builder: (context, state) {
+          return const SettingsScreen();
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.appearance,
+        name: 'appearance',
+        builder: (context, state) {
+          return const AppearanceScreen();
+        },
+      ),
+
+      GoRoute(
+        path: AppRoutes.security,
+        name: 'security',
+        builder: (context, state) {
+          return const SecurityScreen();
         },
       ),
     ],
